@@ -2,8 +2,10 @@ package com.springframework.spring6webapp.bootstrap;
 
 import com.springframework.spring6webapp.domain.Author;
 import com.springframework.spring6webapp.domain.Book;
+import com.springframework.spring6webapp.domain.Publisher;
 import com.springframework.spring6webapp.repositories.AuthorRepository;
 import com.springframework.spring6webapp.repositories.BookRepository;
+import com.springframework.spring6webapp.repositories.PublisherRepository;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,9 +16,12 @@ public class BootstrapData implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
-    private BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository) {
+    private final PublisherRepository publisherRepository;
+
+    private BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     @Override
@@ -46,8 +51,20 @@ public class BootstrapData implements CommandLineRunner {
         ericSaved.getBooks().add(dddSaved);
         rodSaved.getBooks().add(noEJBSaved);
 
+        Publisher publisher = new Publisher();
+        publisher.setPublisherName("publisher name");
+        publisher.setState("TX");
+        publisher.setAddress("Narrow Street 1");
+        publisher.setCity("Texas");
+        publisher.setZip("123456");
+
+        authorRepository.save(ericSaved);
+        authorRepository.save(rodSaved);
+        publisherRepository.save(publisher);
+
         System.out.println("In Bootstrap");
         System.out.println("Author Count: " + authorRepository.count());
         System.out.println("Book Count: " + bookRepository.count());
+        System.out.println("Publisher Count: " + publisherRepository.count());
     }
 }
